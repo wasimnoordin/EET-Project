@@ -1,0 +1,28 @@
+
+  
+  .login-container {
+    display: flex;
+    height: 60vh;
+    width: 90vh;
+    }
+  
+  .login-form {
+    background: linear-gradient(to right, #5a3fd3, #5a3fd3 50%, #f0f0f0  50%, #f0f0f0);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 3000%;
+    height: 100%;
+    margin-left: auto; 
+  text-align: right; 
+   margin-top: auto;
+  }
+  .button{
+    right: 500;
+    
+    }
+  
+
+  
+ 
+  
