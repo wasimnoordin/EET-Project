@@ -1,6 +1,4 @@
 import React from "react";
-import './CapgeminiName.css';
-
 
 const CapgeminiName = ({ src, alt }) => {
     return (

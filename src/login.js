@@ -1,24 +1,81 @@
 import React, { useState } from 'react';
 import './login.css'
+//import { useNavigate } from 'react-router-dom';
 
 
-const Login =() => {
-const {login, setLogin} = useState('');
-  // < form className="login-form" onSubmit={handleSubmit}> handleSubmit is a function where we perform your authentication logic
-    return (
-      <div className="login-container">
-          
-      <form className="login-form" > 
-          {  <input 
-          className="button"
-            type="text"
-            id="username"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            />}
-         
-        </form>
-    </div>
+const Login =(props) => {
+const [Email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [emailError, setEmailError] = useState('');
+const [passwordError, setPasswordError] = useState ('');
+
+//const navigate = useNavigate();
+
+const onButtonClick = () => {
+  setEmailError("")
+  setPasswordError("")
+
+  //sets email errors
+  if ("" === Email){
+    setEmailError("Please enter your email address")
+    return
+  }
+if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(Email)){
+  setEmailError("Please enter a valid email address");
+  return;
+}  
+//Sets password errors
+if ("" === password){
+  setPasswordError("Please enter a password")
+  return
+}
+if (password.length < 7){
+  setPasswordError("The password must be 8 characters or longer")
+  return
+} 
+}
+
+//Email and password input boxes and a login button
+     return (
+      <body>
+      <div class="container" id="container">
+        <div class="form-container log-in-container">
+          <form action="#">
+          <h1>TeamUp!</h1>
+              <p>Connecting you with your team mates!</p> 
+          </form>
+        </div>
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-panel overlay-right">
+            <h1>Login to TeamUp!</h1>
+            
+            <input
+            type="email"
+                    value={Email}
+                    placeholder="Email"
+                    onChange={ev => setEmail(ev.target.value)} />
+                    <label className="errorLabel">{emailError}</label>
+
+            <input 
+                  type="password"
+                    value={password}
+                    placeholder='Password'
+                onChange={ev => setPassword(ev.target.value)}/>
+              <label className="errorLabel">{passwordError}</label>
+            <p><a href="#">Forgotten your password?</a> 
+            <a href="#">Create an account</a></p>
+
+            <input 
+                   className ={"button"}
+                   type ="button"
+                   onClick={onButtonClick}
+                   value={"login"} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
     );
   };
   

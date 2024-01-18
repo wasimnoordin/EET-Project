@@ -1,19 +1,15 @@
 import './App.css';
 import Login from './login.js';
-import CapgeminiName from './CapgeminiName';
+import Header from './Header.js';
+
 
 
 function App() {
   return (
     <>
-      <div className="CapApp">
-        <header className="header">
-          <CapgeminiName
-            src="./CapgeminiName.png"
-            alt="Capgemini Name"
-              />
-            <Login />
-          </header>
+      <div>
+        <Header />
+        <Login />
       </div>
     </>
   );
