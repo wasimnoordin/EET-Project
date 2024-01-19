@@ -6,11 +6,12 @@ import Header from './Header.js';
 
 function App() {
   return (
-    <>
+    <><body>
       <div>
         <Header />
         <Login />
       </div>
+      </body>
     </>
   );
 }

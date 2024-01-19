@@ -1,29 +1,16 @@
-
-/* .header {
-    background: linear-gradient(to right, #a4a4e4, #111766);
+.CapgeminiName{
+  max-width: 100%;
+  position: absolute;
+  top: 0rem;
+  left: 0;
 }
-     
-  
-.CapgeminiName {
-   
-    width: 100%;
-    height: 80rem;
-    
-}
-  
-    /* Media query for screens with a minimum width of 368px */
-  /*  @media  (max-width: 600px) {
-      .CapgeminiName {
-        background-color: antiquewhite;
-      width: 5rem
-    }
-}
-    /* Media query for screens with a minimum width of 1024px */
-   /* @media screen and (min-width: 600px) {
-    
-    }
-  
-
-
-
- 
+body {
+  background:  #837eac;
+} 
+@media only screen and (min-width: 150px) and (max-width: 650px) {
+  .CapgeminiName {
+    margin-right: 20px;
+margin-top: 20px;
+width: 5rem;
+height: 3rem;
+}}
