@@ -1,10 +1,10 @@
 import React from "react";
-
+import './CapName.css';
 const CapName = ({ src, alt }) => {
     return (
-      <div className="CapgeminiName">
+     
         <img src={src} alt={alt} />
-      </div>
+     
     );
   };
   

@@ -4,10 +4,10 @@ import './Header.css';
 export default function Header() {
   return (
     <header className="header">
-      <CapName
+       <CapName
      
-       src="./CapgeminiName.png"
-       alt="Capgemini Name"/>
+     src="./CapgeminiName.png"
+     alt="Capgemini Name"/>
     </header>
   );
 }

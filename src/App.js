@@ -1,23 +1,20 @@
-import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './login';
+import Login from './login.js';
 import Header from './Header.js';
-import ForgottenPassword from './forgotpassword.js';
-import CreateAccount from './createAccount'; 
+
+
 
 function App() {
   return (
-    <Router>
+    <>
       <div>
+        <body>
         <Header />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgottenPassword />} />
-          <Route path="/create-account" element={<CreateAccount />} /> 
-        </Routes>
+        <Login />
+        </body>
       </div>
-    </Router>
+      
+    </>
   );
 }
 

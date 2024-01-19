@@ -1,16 +1,4 @@
-.CapgeminiName{
-  max-width: 100%;
-  position: absolute;
-  top: 0rem;
-  left: 0;
-}
+
 body {
-  background:  #837eac;
+  background:linear-gradient(to right, #e4e4e6, #1c1c9b);
 } 
-@media only screen and (min-width: 150px) and (max-width: 650px) {
-  .CapgeminiName {
-    margin-right: 20px;
-margin-top: 20px;
-width: 5rem;
-height: 3rem;
-}}
