@@ -1,15 +1,52 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"auth/models"
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Welcome to the best desk booking app evaaaaaa")
-	})
+func init() {
+	// Load .env file
+	if err := godotenv.Load("environment_variables.env"); err != nil {
+		log.Print("No .env file found")
+	}
+}
 
-	fmt.Println("Server is starting...")
-	http.ListenAndServe(":8080", nil)
+func main() {
+	// Use environment variables
+	dbHost := os.Getenv("DB_HOST")
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbName := os.Getenv("DB_NAME")
+	dbPort := os.Getenv("DB_PORT")
+
+	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPass + " dbname=" + dbName + " port=" + dbPort + " sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
+
+	// Automigrate your User struct to create a table
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatalf("failed to migrate database: %v", err)
+	}
+
+	// Optionally, just to test the connection, you can ping the database
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get database: %v", err)
+	}
+
+	err = sqlDB.Ping()
+	if err != nil {
+		log.Fatalf("failed to ping database: %v", err)
+	}
+
+	log.Println("Connected to database successfully")
 }
