@@ -1,4 +1,4 @@
-module eet-project
+module EET-Project
 
 go 1.20
 

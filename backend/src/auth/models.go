@@ -5,7 +5,7 @@ import (
 )
 
 // User struct declaration
-type User struct {cd
+type User struct {
 	gorm.Model
 	Name     string
 	Email    string `gorm:"type:varchar(100);unique_index"`

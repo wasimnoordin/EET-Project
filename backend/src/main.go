@@ -1,9 +1,10 @@
 package main
 
 import (
-	"auth/models"
 	"log"
 	"os"
+
+	models "EET-Project/auth"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
