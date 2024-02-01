@@ -6,6 +6,7 @@ import (
 
 	models "EET-Project/auth"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,6 +20,9 @@ func init() {
 }
 
 func main() {
+	// Initialize Gin router
+	r := gin.Default()
+
 	// Use environment variables
 	dbHost := os.Getenv("DB_HOST")
 	dbUser := os.Getenv("DB_USER")
@@ -26,6 +30,7 @@ func main() {
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_PORT")
 
+	// Database connection string
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPass + " dbname=" + dbName + " port=" + dbPort + " sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -50,4 +55,25 @@ func main() {
 	}
 
 	log.Println("Connected to database successfully")
+
+	// Setup route group for API
+	api := r.Group("/api")
+	{
+		api.POST("/register", RegisterHandler)
+		api.POST("/login", LoginHandler)
+	}
+
+	// Protected API routes
+	protectedApi := api.Group("/", AuthMiddleware())
+	{
+		// Define protected routes here
+		protectedApi.GET("/protected-route", ProtectedRouteHandler)
+	}
+
+	// Start serving the application
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default to port 8080 if not specified
+	}
+	r.Run(":" + port)
 }
