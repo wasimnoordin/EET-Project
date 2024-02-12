@@ -1,6 +1,6 @@
 import Navbar from "../NavBar";
 
-function Home() {
+function Booking() {
     
 
   
@@ -18,4 +18,4 @@ function Home() {
  
 
 
-export default Home;
+export default Booking;

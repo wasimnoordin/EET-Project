@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Account from './LoginComponnents/createAccount';
 import Password from './LoginComponnents/forgotpassword';
 import Home from './HomePageComponents/HomePage';
+import Booking from './BookingFormComponents/BookingForm';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/Createaccount" element={<Account />} />
         <Route path="/Changepassword" element={<Password />} />
         <Route path="/homepage" element={<Home />} />
+        <Route path="/bookingform" element={<Booking />} />
         </Routes>
         </Router>
   );

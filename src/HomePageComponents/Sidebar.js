@@ -1,24 +1,26 @@
-import React from 'react';
-import { slide as Menu } from 'react-burger-menu';
-import './Sidebar.css';
+import React from "react";
+import "./Sidebar.css";
+import { SidebarData } from "../SidebarData";
 
-const Sidebar = () => {
-    return (
-      <Menu>
-        <a className="menu-item" href="/">
-          map
-        </a>
-        <a className="menu-item" href="/logout">
-          Logout
-        </a>
-        <a className="menu-item" href="/editPage">
-          Edit account
-        </a>
-        <a className="menu-item" href="/desserts">
-          Locate a team mate
-        </a>
-      </Menu>
-    );
-  };
-  
-  export default Sidebar;
+
+function Sidebar(){
+    return<div className="navbar">
+        <ul className="navbarlist">
+                    {SidebarData.map((val, key) =>{
+                        return (                        
+                        <li
+                         key={key}
+                         className ="row"
+                         onClick={() =>{window.location.pathname=val.link}}>
+                            <div id="icon">{val.icon}</div>
+                            <div id="title">{val.title}</div>
+                        </li>
+                        );    
+                })}
+               </ul>
+            </div>
+    
+
+}
+
+export default Sidebar;
