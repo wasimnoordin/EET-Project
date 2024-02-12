@@ -3,52 +3,36 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	models "EET-Project/auth"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// Create a slice to store registered routes
-var registeredRoutes []string
-
-func init() {
+func main() {
 	// Load .env file
 	if err := godotenv.Load("environment_variables.env"); err != nil {
 		log.Print("No .env file found")
 	}
-}
 
-// // Add this function to seed the database with test data
-// func seedDatabase(db *gorm.DB) {
-// 	// Check if the database table is empty or has some data already
-// 	var count int64
-// 	db.Model(&models.User{}).Count(&count)
-
-// 	if count == 0 {
-// 		// Hardcode the test user data
-// 		testUsers := []models.User{
-// 			{
-// 				Name:         "John Doe",
-// 				EmailAddress: "john@example.com",
-// 				Gender:       "Male",
-// 				Password:     "testpass",
-// 			},
-// 		}
-
-// 		// Create the test users in the database
-// 		for _, user := range testUsers {
-// 			db.Create(&user)
-// 		}
-// 	}
-// }
-
-func main() {
 	// Initialize Gin router
 	r := gin.Default()
+
+	// Configure CORS to allow specific origin
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowWildcard:    true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Use environment variables
 	dbHost := os.Getenv("DB_HOST")
@@ -65,47 +49,15 @@ func main() {
 	}
 
 	// Automigrate your User struct to create a table
-	err = db.AutoMigrate(&models.User{})
-	if err != nil {
+	if err := db.AutoMigrate(&models.User{}); err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
-
-	// Optionally, just to test the connection, you can ping the database
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatalf("failed to get database: %v", err)
-	}
-
-	err = sqlDB.Ping()
-	if err != nil {
-		log.Fatalf("failed to ping database: %v", err)
-	}
-
-	log.Println("Connected to database successfully")
-
-	// Call the seedDatabase function to populate test data
-	// seedDatabase(db)
 
 	// Setup route group for API
 	api := r.Group("/api")
 	{
-		api.POST("/register", RegisterHandler)
-		api.POST("/login", LoginHandler)
-	}
-
-	// Protected API routes
-	protectedApi := api.Group("/", AuthMiddleware())
-	{
-		// Define protected routes here
-		protectedApi.GET("/protected-route", ProtectedRouteHandler)
-	}
-
-	// Append registered routes to the slice
-	registeredRoutes = append(registeredRoutes, "POST /api/register", "POST /api/login", "GET /api/protected-route")
-
-	// Print registered routes
-	for _, route := range registeredRoutes {
-		log.Printf("Route: %s", route)
+		api.POST("/register", RegisterHandler(db))
+		api.POST("/login", LoginHandler(db))
 	}
 
 	// Start serving the application
@@ -113,5 +65,7 @@ func main() {
 	if port == "" {
 		port = "8080" // Default to port 8080 if not specified
 	}
-	r.Run(":" + port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatalf("failed to run server: %v", err)
+	}
 }

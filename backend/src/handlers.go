@@ -1,7 +1,7 @@
 package main
 
 import (
-	models "EET-Project/auth"
+	models "EET-Project/auth" // Make sure this import path is correct for your project
 	"net/http"
 	"os"
 	"time"
@@ -9,97 +9,86 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// Assuming db is a global variable representing your database connection
-var db *gorm.DB
-
-// Initialize the db variable with your database connection
-func initDB() error {
-	// Configuration details should be moved to environment variables or config files
-	dsn := "host=localhost user=wasimnoordin dbname=eetdatabase sslmode=disable password=1234"
-	var err error
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// Call initDB in your main function or somewhere appropriate to initialize the database connection
-
+// Define your UserClaims for JWT
 type UserClaims struct {
 	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
-func RegisterHandler(c *gin.Context) {
-	var newUser models.User
-	if err := c.BindJSON(&newUser); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// RegisterHandler is now a function that returns a gin.HandlerFunc
+func RegisterHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var newUser models.User
+		if err := c.BindJSON(&newUser); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while hashing password"})
-		return
-	}
-	newUser.Password = string(hashedPassword)
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while hashing password"})
+			return
+		}
+		newUser.Password = string(hashedPassword)
 
-	result := db.Create(&newUser)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving user to the database"})
-		return
-	}
+		result := db.Create(&newUser)
+		if result.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving user to the database"})
+			return
+		}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+		c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+	}
 }
 
-func LoginHandler(c *gin.Context) {
-	var loginCredentials struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-	if err := c.BindJSON(&loginCredentials); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var user models.User
-	result := db.Where("email = ?", loginCredentials.Email).First(&user)
-	if result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error finding user"})
+// LoginHandler is now a function that returns a gin.HandlerFunc
+func LoginHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var loginCredentials struct {
+			Email    string `json:"email"`
+			Password string `json:"password"`
 		}
-		return
-	}
+		if err := c.BindJSON(&loginCredentials); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginCredentials.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
-		return
-	}
+		var user models.User
+		result := db.Where("email = ?", loginCredentials.Email).First(&user)
+		if result.Error != nil {
+			if result.Error == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
+			} else {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Error finding user"})
+			}
+			return
+		}
 
-	expirationTime := time.Now().Add(1 * time.Hour)
-	claims := &UserClaims{
-		Email: user.EmailAddress,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
+		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginCredentials.Password)); err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
+			return
+		}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while signing the token"})
-		return
-	}
+		expirationTime := time.Now().Add(1 * time.Hour)
+		claims := &UserClaims{
+			Email: user.EmailAddress,
+			StandardClaims: jwt.StandardClaims{
+				ExpiresAt: expirationTime.Unix(),
+			},
+		}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while signing the token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	}
 }
 
 /* TO IMPROVE:
