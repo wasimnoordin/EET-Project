@@ -15,7 +15,16 @@ func AuthMiddleware() gin.HandlerFunc {
 		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is not provided"})
 		// 	return
 		// }
+		// authHeader := c.GetHeader("Authorization")
+		// if authHeader == "" {
+		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is not provided"})
+		// 	return
+		// }
 
+		// tokenString := strings.TrimPrefix(authHeader, BearerSchema)
+		// token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		// 	return []byte(os.Getenv("JWT_SECRET")), nil
+		// })
 		// tokenString := strings.TrimPrefix(authHeader, BearerSchema)
 		// token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// 	return []byte(os.Getenv("JWT_SECRET")), nil
@@ -25,7 +34,17 @@ func AuthMiddleware() gin.HandlerFunc {
 		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		// 	return
 		// }
+		// if err != nil {
+		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		// 	return
+		// }
 
+		// if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
+		// 	c.Set("email", claims.Email)
+		// } else {
+		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		// 	return
+		// }
 		// if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
 		// 	c.Set("email", claims.Email)
 		// } else {

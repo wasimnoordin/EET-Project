@@ -20,48 +20,91 @@ const Account = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send data to server or perform validation)
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      var formData = new FormData(form);
+      // Create a JSON object with user data
+      const userData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password')
+      };
+      console.log(userData)
+
+      // Make a POST request to the backend API endpoint
+      fetch('http://localhost:8080/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend
+          if (data.message) {
+            // Registration successful
+            setRegistrationResult('Registration successful. You can now log in.');
+          } else if (data.error) {
+            // Registration error
+            setRegistrationResult('Registration failed. ' + data.error);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setRegistrationResult('An error occurred while registering.');
+        });
+    })
+  }
+
+    return (
+      <div className="accountForm">
+        <h1>Create Account</h1>
+        <form onSubmit={handleSubmit} id="form">
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <label className="errorLabel">{passwordError}</label>
+          <button
+            type="submit"
+            className="submit"
+            onClick={onButtonClick}
+          >
+            Create Account
+          </button>
+        </form>
+        {registrationResult && <p>{registrationResult}</p>}
+        <p>
+          Already have an account? <Link to="/" className="LogLink">Login</Link>
+        </p>
+      </div>
+    );
   };
-//Allows a user to create an account using their name, an email address and a password
-  return (
-    <div className="accountForm">
-      <h1>Create Account</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-         <label className="errorLabel">{passwordError}</label>
-        <button type="submit" 
-        className="submit"
-        onClick={onButtonClick}>
-          Create Account
-        </button>
-      </form>
-      <p>
-        Already have an account? <Link to="/" className="LogLink">Login</Link>
-      </p>
-    </div>
-  );
-};
-export default Account;
+
+  export default Account;
+

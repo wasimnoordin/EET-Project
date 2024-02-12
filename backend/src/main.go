@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"time"
 
 	models "EET-Project/auth"
 
@@ -15,13 +16,26 @@ import (
 )
 
 func main() {
+func main() {
 	// Load .env file
 	if err := godotenv.Load("environment_variables.env"); err != nil {
 		log.Print("No .env file found")
 	}
 
+
 	// Initialize Gin router
 	r := gin.Default()
+
+	// Configure CORS to allow specific origin
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowWildcard:    true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Configure CORS to allow specific origin
 	r.Use(cors.New(cors.Config{
@@ -50,6 +64,7 @@ func main() {
 
 	// Automigrate your User struct to create a table
 	if err := db.AutoMigrate(&models.User{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}); err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
 
@@ -58,12 +73,17 @@ func main() {
 	{
 		api.POST("/register", RegisterHandler(db))
 		api.POST("/login", LoginHandler(db))
+		api.POST("/register", RegisterHandler(db))
+		api.POST("/login", LoginHandler(db))
 	}
 
 	// Start serving the application
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // Default to port 8080 if not specified
+	}
+	if err := r.Run(":" + port); err != nil {
+		log.Fatalf("failed to run server: %v", err)
 	}
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("failed to run server: %v", err)
