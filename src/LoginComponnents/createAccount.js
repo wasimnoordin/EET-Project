@@ -35,7 +35,7 @@ const Account = () => {
       console.log(userData)
 
       // Make a POST request to the backend API endpoint
-      fetch('http://localhost:3000/register', {
+      fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
