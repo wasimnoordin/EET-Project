@@ -8,6 +8,7 @@ const Account = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState ('');
+  const [registrationResult, setRegistrationResult] = useState('');
 
   const onButtonClick = () => {
     setPasswordError("")
