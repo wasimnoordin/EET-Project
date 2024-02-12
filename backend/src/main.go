@@ -12,12 +12,39 @@ import (
 	"gorm.io/gorm"
 )
 
+// Create a slice to store registered routes
+var registeredRoutes []string
+
 func init() {
 	// Load .env file
 	if err := godotenv.Load("environment_variables.env"); err != nil {
 		log.Print("No .env file found")
 	}
 }
+
+// // Add this function to seed the database with test data
+// func seedDatabase(db *gorm.DB) {
+// 	// Check if the database table is empty or has some data already
+// 	var count int64
+// 	db.Model(&models.User{}).Count(&count)
+
+// 	if count == 0 {
+// 		// Hardcode the test user data
+// 		testUsers := []models.User{
+// 			{
+// 				Name:         "John Doe",
+// 				EmailAddress: "john@example.com",
+// 				Gender:       "Male",
+// 				Password:     "testpass",
+// 			},
+// 		}
+
+// 		// Create the test users in the database
+// 		for _, user := range testUsers {
+// 			db.Create(&user)
+// 		}
+// 	}
+// }
 
 func main() {
 	// Initialize Gin router
@@ -56,6 +83,9 @@ func main() {
 
 	log.Println("Connected to database successfully")
 
+	// Call the seedDatabase function to populate test data
+	// seedDatabase(db)
+
 	// Setup route group for API
 	api := r.Group("/api")
 	{
@@ -68,6 +98,14 @@ func main() {
 	{
 		// Define protected routes here
 		protectedApi.GET("/protected-route", ProtectedRouteHandler)
+	}
+
+	// Append registered routes to the slice
+	registeredRoutes = append(registeredRoutes, "POST /api/register", "POST /api/login", "GET /api/protected-route")
+
+	// Print registered routes
+	for _, route := range registeredRoutes {
+		log.Printf("Route: %s", route)
 	}
 
 	// Start serving the application
