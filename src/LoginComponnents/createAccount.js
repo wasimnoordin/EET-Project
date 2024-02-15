@@ -67,6 +67,7 @@ const Account = () => {
         <h1>Create Account</h1>
         <form onSubmit={handleSubmit} id="form">
           <input
+  className='inputForm'
             type="text"
             name="name"
             placeholder="Name"
@@ -75,6 +76,7 @@ const Account = () => {
             required
           />
           <input
+  className='inputForm'
             type="email"
             name="email"
             placeholder="Email"
