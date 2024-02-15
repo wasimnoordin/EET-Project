@@ -63,6 +63,7 @@ if (password.length < 7){
 
             <input 
                   type="password"
+                   className='inputForm'
                     value={password}
                     placeholder='Password'
                 onChange={ev => setPassword(ev.target.value)}/>
