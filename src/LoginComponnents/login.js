@@ -55,6 +55,7 @@ if (password.length < 7){
             
             <input
             type="email"
+                    className='inputForm'
                     value={Email}
                     placeholder="Email"
                     onChange={ev => setEmail(ev.target.value)} />
