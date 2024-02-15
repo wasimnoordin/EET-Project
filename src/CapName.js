@@ -3,7 +3,7 @@ import './CapName.css';
 const CapName = ({ src, alt }) => {
     return (
      
-        <img src={src} alt={alt} />
+        <img className="Capimg" src={src} alt={alt} />
      
     );
   };

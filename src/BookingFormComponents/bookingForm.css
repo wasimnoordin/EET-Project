@@ -1,0 +1,83 @@
+.wrapper{
+    max-width: 1170px;
+    margin:auto;
+    padding: 70px;
+    
+}
+.bookingForm{
+    align-items: center;
+    z-index: 1;    
+    position: relative;
+    margin:auto auto;
+    height: 50rem;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 1.25rem;
+    
+    box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.65rem 0.65rem rgba(0,0,0,0.22);
+}
+.Office {
+    display: inline;
+       width: 20%;
+      
+}
+.OfficeOption{
+    width: 15%;
+    background-color: transparent;
+    border: 1px solid #070707;
+    border-radius: 1.25rem;
+    padding: 0 1em 0 0;
+    margin-left: 0.4rem;
+    bottom:1.25rem;
+}
+
+.SelectDateCalendar{
+    position: static; /* Change to relative to make sure it's relative to its parent */
+    margin-left: 0.5rem;
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
+   bottom:1.25rem;
+   }
+
+
+
+
+.react-datepicker {
+    position: absolute;
+    top: 100%; /* Position it below the parent component */
+    left: 3rem; 
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
+}
+.floor{
+    position: relative;
+    left: 28.6rem;
+    bottom:1.25rem;   
+}
+  
+ .floorOption {
+    display: inline;
+    position: relative;
+    left: 29rem;
+    bottom:1.25rem;
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
+}
+
+.button{
+    position: fixed;
+    top: 26rem;
+    right: 30rem;
+    display: grid;
+    width: 15%;
+}
+
+.MapImg {
+    position: relative;
+    top: 0rem;
+    left: 10rem;
+    width:80%;
+}
