@@ -22,7 +22,7 @@ const Password = () => {
       onChange={(e) => setEmail(e.target.value)}
       required
     />
-    <button type="submit" className="button">
+    <button type="submit" className="forgottenbutton">
       Send Reset Link
     </button>
     {message && <div className="message">{message}</div>}{' '}
