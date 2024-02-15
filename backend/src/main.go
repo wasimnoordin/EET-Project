@@ -58,6 +58,7 @@ func main() {
 	{
 		api.POST("/register", RegisterHandler(db))
 		api.POST("/login", LoginHandler(db))
+		api.GET("/echo/:message", echoHandler(db))
 	}
 
 	// Start serving the application

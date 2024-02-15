@@ -10,6 +10,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -92,6 +93,9 @@ func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 			EmailAddress string `json:"email"`
 			Password     string `json:"password"`
 		}
+
+		log.Info("Login Handler")
+
 		if err := c.BindJSON(&loginCredentials); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -102,7 +106,7 @@ func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 		fmt.Printf("Request Body: %s\n", bodyContent)
 
 		var user models.User
-		result := db.Where("email = ?", loginCredentials.EmailAddress).First(&user)
+		result := db.Where("email_address = ?", loginCredentials.EmailAddress).First(&user)
 		if result.Error != nil {
 			if result.Error == gorm.ErrRecordNotFound {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
@@ -133,6 +137,14 @@ func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	}
+}
+
+func echoHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		message, _ := c.Params.Get("message")
+		log.Info(message)
+		c.JSON(http.StatusOK, gin.H{"message": message})
 	}
 }
 
