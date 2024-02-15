@@ -1,90 +1,83 @@
 import React, { useState } from 'react';
 import './login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate(); // Define useNavigate
 
+    const handleLogin = async () => {
+      setError('');
 
-
-const Login =(props) => {
-const [Email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [emailError, setEmailError] = useState('');
-const [passwordError, setPasswordError] = useState ('');
-
-//const navigate = useNavigate();
-
-const onButtonClick = () => {
-  setEmailError("")
-  setPasswordError("")
-
-  //sets email errors
-  if ("" === Email){
-    setEmailError("Please enter your email address")
-    return
-  }
-if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(Email)){
-  setEmailError("Please enter a valid email address");
-  return;
-}  
-//Sets password errors
-if ("" === password){
-  setPasswordError("Please enter a password")
-  return
-}
-if (password.length < 7){
-  setPasswordError("The password must be 8 characters or longer")
-  return
-} 
-}
-
-//Email and password input boxes and a login button
-     return (
-      <div className='g'>
-        <div className="background">
-      <div className="container" id="container">
-        <div className="form-container log-in-container">
-          <form action="#">
-          <h1>TeamUp!</h1>
-              <p>Connecting you with your team mates!</p> 
-          </form>
-        </div>
-        <div className="overlay-container">
-          <div className="overlay">
-            <div className="overlay-panel overlay-right">
-            <h1>Login to TeamUp!</h1>
-            
-            <input
-            type="email"
-                    className='inputForm'
-                    value={Email}
-                    placeholder="Email"
-                    onChange={ev => setEmail(ev.target.value)} />
-                    <label className="errorLabel">{emailError}</label>
-
-            <input 
-                  type="password"
-                   className='inputForm'
-                    value={password}
-                    placeholder='Password'
-                onChange={ev => setPassword(ev.target.value)}/>
-              <label className="errorLabel">{passwordError}</label>
-            <p><Link to ="/Changepassword"> Forgotten your password?</Link> 
-            <Link to ="/Createaccount">Create an account</ Link>
-            </p>
-
-            <input 
-                   className ={"Loginbutton"}
-                   type ="button"
-                   onClick={onButtonClick}
-                   value={"login"} />
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-    );
-  };
+    // Log email and password before sending the request
+    console.log({ email, password });
   
- export default Login;
-      
+      try {
+          const response = await fetch('http://localhost:8080/api/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email, password }),
+          });
+  
+          const data = await response.json();
+  
+          if (!response.ok) {
+              throw new Error(data.error || 'Login failed');
+          }
+  
+          // Login successful, redirect to dashboard using navigate
+          navigate('/dashboard');
+      } catch (error) {
+          setError(error.message);
+      }
+  };
+
+    return (
+        <div className='g'>
+            <div className="background">
+                <div className="container" id="container">
+                    <div className="form-container log-in-container">
+                        <form action="#">
+                            <h1>TeamUp!</h1>
+                            <p>Connecting you with your team mates!</p>
+                        </form>
+                    </div>
+                    <div className="overlay-container">
+                        <div className="overlay">
+                            <div className="overlay-panel overlay-right">
+                                <h1>Login to TeamUp!</h1>
+
+                                <input
+                                    type="email"
+                                    className='inputForm'
+                                    value={email}
+                                    placeholder="Email"
+                                    onChange={(ev) => setEmail(ev.target.value)} />
+
+                                <input
+                                    type="password"
+                                    className='inputForm'
+                                    value={password}
+                                    placeholder='Password'
+                                    onChange={(ev) => setPassword(ev.target.value)} />
+
+                                <button className="Loginbutton" onClick={handleLogin}>Login</button>
+                                {error && <p className='error-message'>{error}</p>}
+                                <p>
+                                    <Link to="/Changepassword"> Forgotten your password?</Link>
+                                    <Link to="/Createaccount">Create an account</Link>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Login;

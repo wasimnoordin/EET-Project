@@ -2,8 +2,10 @@ package main
 
 import (
 	models "EET-Project/auth" // Make sure this import path is correct for your project
+	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -18,23 +20,62 @@ type UserClaims struct {
 	jwt.StandardClaims
 }
 
+// Define your UserCredentials struct for registration data
+type UserCredentials struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // RegisterHandler is now a function that returns a gin.HandlerFunc
 func RegisterHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var newUser models.User
+		var newUser UserCredentials
 		if err := c.BindJSON(&newUser); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		// Check if the email address is empty
+		if newUser.Email == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Email address cannot be empty"})
+			return
+		}
+
+		// Check if the email address ends with "@capgemini.com"
+		if !strings.HasSuffix(newUser.Email, "@capgemini.com") {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email domain. Must be @capgemini.com"})
+			return
+		}
+
+		// Check if the email address is already registered
+		var existingUser models.User
+		result := db.Where("email_address = ?", newUser.Email).First(&existingUser)
+		if result.Error == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Email address already registered"})
+			return
+		} else if result.Error != gorm.ErrRecordNotFound {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking email uniqueness"})
+			return
+		}
+
+		// Now you can use newUser.Name, newUser.Email, and newUser.Password to create the new user account
 
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while hashing password"})
 			return
 		}
-		newUser.Password = string(hashedPassword)
 
-		result := db.Create(&newUser)
+		// Create a new User model object
+		user := models.User{
+			Name:         newUser.Name,
+			EmailAddress: newUser.Email,
+			Password:     string(hashedPassword),
+		}
+
+		// Save the user to the database
+		result = db.Create(&user)
 		if result.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving user to the database"})
 			return
@@ -48,16 +89,20 @@ func RegisterHandler(db *gorm.DB) gin.HandlerFunc {
 func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var loginCredentials struct {
-			Email    string `json:"email"`
-			Password string `json:"password"`
+			EmailAddress string `json:"email"`
+			Password     string `json:"password"`
 		}
 		if err := c.BindJSON(&loginCredentials); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
+		// Log the entire request body content
+		bodyContent, _ := c.GetRawData()
+		fmt.Printf("Request Body: %s\n", bodyContent)
+
 		var user models.User
-		result := db.Where("email = ?", loginCredentials.Email).First(&user)
+		result := db.Where("email = ?", loginCredentials.EmailAddress).First(&user)
 		if result.Error != nil {
 			if result.Error == gorm.ErrRecordNotFound {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
