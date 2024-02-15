@@ -72,7 +72,7 @@ if (password.length < 7){
             </p>
 
             <input 
-                   className ={"button"}
+                   className ={"Loginbutton"}
                    type ="button"
                    onClick={onButtonClick}
                    value={"login"} />
