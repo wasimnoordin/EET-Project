@@ -15,7 +15,7 @@ const Password = () => {
   <form className="RP" >
     <h2>Reset Password</h2>
     <input
-    className='input'
+    className='inputForm'
       type="email"
       placeholder="Enter your email"
       value={email}
