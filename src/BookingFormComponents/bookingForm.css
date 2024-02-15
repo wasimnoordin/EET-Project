@@ -9,7 +9,7 @@
     z-index: 1;    
     position: relative;
     margin:auto auto;
-    height: 50rem;
+    height: 40rem;
     padding: 20px;
     background-color: #fff;
     border-radius: 1.25rem;
@@ -23,7 +23,6 @@
 }
 .OfficeOption{
     width: 15%;
-    background-color: transparent;
     border: 1px solid #070707;
     border-radius: 1.25rem;
     padding: 0 1em 0 0;
@@ -52,16 +51,14 @@
     font-size: 0.8rem;
 }
 .floor{
-    position: relative;
-    left: 28.6rem;
-    bottom:1.25rem;   
+    position: Static;
 }
   
  .floorOption {
     display: inline;
-    position: relative;
-    left: 29rem;
-    bottom:1.25rem;
+    position: static;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
     border: 1px solid #070707;
     border-radius: 0.9rem;
     font-size: 0.8rem;
@@ -79,5 +76,51 @@
     position: relative;
     top: 0rem;
     left: 10rem;
-    width:80%;
+    width:70%;
+}
+
+@media only screen and (max-width: 1000px) {
+    .bookingForm{
+        top:5rem;
+        height: 45rem;
+    }
+    .floorOption {
+       left: 29rem;
+        bottom:1.25rem;       
+        font-size: 0.8rem;
+    }
+
+
+    .MapImg {
+        position: relative;
+        top: 2rem;
+        left: 1rem;
+        
+        width:100%;
+    }
+    
+}
+
+@media only screen and (max-width: 700px) {
+
+    .bookingForm{
+        top:5rem;
+        height: 40rem;
+    }
+    .floorOption {
+       left: 29rem;
+        bottom:1.25rem;       
+        font-size: 0.8rem;
+    }
+
+
+    .MapImg {
+        position: relative;
+        top: 1rem;
+        left: 1rem;
+        
+        width:100%;
+    }
+    
+
 }
