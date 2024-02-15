@@ -83,6 +83,7 @@ const Account = () => {
             required
           />
           <input
+              className='inputForm'
             type="password"
             name="password"
             placeholder="Password"
