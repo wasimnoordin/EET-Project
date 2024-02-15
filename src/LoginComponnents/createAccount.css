@@ -19,7 +19,7 @@
     flex-direction: column;
   }
   
-  input {
+  .inputForm {
     background-color: #eee;
 	border: 1px solid rgb(116, 114, 114);
   border-radius: 0.9rem;
