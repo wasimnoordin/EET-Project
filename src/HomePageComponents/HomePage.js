@@ -1,4 +1,4 @@
-import Navbar from "../NavBar";
+import Navbar from "../SideBarComponents/NavBar";
 
 function Home() {
     
