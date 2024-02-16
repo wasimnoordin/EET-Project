@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../NavBar';
+import Navbar from '../SideBarComponents/NavBar';
 import './bookingForm.css';
 import DatepickerComponent from './DatePicker';
 import FloorDropdownComponent from './FloorDropdown';
