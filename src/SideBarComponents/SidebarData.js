@@ -13,6 +13,6 @@ export const SidebarData = [
 
     {
     title: "Home",
-    link: "/hompage"
+    link: "/homepage"
     },
 ];
