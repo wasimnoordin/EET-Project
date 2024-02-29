@@ -58,6 +58,8 @@ func main() {
 	{
 		api.POST("/register", RegisterHandler(db))
 		api.POST("/login", LoginHandler(db))
+		api.POST("/forgot-password", ForgotPasswordHandler(db))
+		api.POST("/reset-password", PasswordResetHandler(db))
 		api.GET("/echo/:message", echoHandler(db))
 	}
 

@@ -1,11 +1,12 @@
 package main
 
 import (
-	models "EET-Project/auth" // Make sure this import path is correct for your project
+	models "EET-Project/auth"
+	"crypto/rand"
 	"fmt"
 	"net/http"
+	"net/smtp"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -43,11 +44,11 @@ func RegisterHandler(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Check if the email address ends with "@capgemini.com"
-		if !strings.HasSuffix(newUser.Email, "@capgemini.com") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email domain. Must be @capgemini.com"})
-			return
-		}
+		// // Check if the email address ends with "@capgemini.com"
+		// if !strings.HasSuffix(newUser.Email, "@capgemini.com") {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email domain. Must be @capgemini.com"})
+		// 	return
+		// }
 
 		// Check if the email address is already registered
 		var existingUser models.User
@@ -148,26 +149,113 @@ func echoHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-/* TO IMPROVE:
+// Helper function to generate a secure token
+func generateResetToken() (string, error) {
+	token := make([]byte, 16) // Generates a 128-bit token
+	_, err := rand.Read(token)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%x", token), nil
+}
 
-Validation and Error Handling: Ensure robust validation of user input (for both registration and login) and provide meaningful error messages. For example, you could validate the email format and password strength during registration and ensure that error messages do not reveal too much information about the database state or user existence to avoid enumeration attacks.
+// Helper function to send email
+func sendResetEmail(to, token string) error {
+	from := os.Getenv("SMTP_FROM")
+	password := os.Getenv("SMTP_PASS")
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
 
-Duplicate Email Handling: When registering a new user, ensure you handle the case where the email already exists in the database gracefully. This involves checking for duplicate entries before attempting to save a new user and responding with an appropriate error message if a duplicate is found.
+	auth := smtp.PlainAuth("", from, password, smtpHost)
 
-Email Verification: After registration, consider implementing an email verification step to confirm the user's email address. This typically involves sending an email with a verification link or code that the user must click or enter to activate their account.
+	url := "http://localhost:3000/Changepassword?token=" + token // Replace with actual password reset URL
+	message := []byte("To: " + to + "\r\n" +
+		"Subject: Password Reset Request\r\n" +
+		"\r\n" +
+		"You requested a password reset. Click the following link to reset your password:\r\n" + url +
+		"\r\nIf you did not request a password reset, please ignore this email.\r\n")
 
-Secure Password Storage: It looks like you're already hashing passwords before storing them, which is great. Ensure you're using a strong hash function (bcrypt is a good choice) and consider adding a salt to each password for additional security.
+	return smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, message)
+}
 
-JWT Token Security: When generating JWT tokens, ensure you're using a secure signing key that's kept secret. Also, consider setting other JWT claims such as issuer (iss) and audience (aud) to add additional layers of validation for your tokens.
+// ForgotPasswordHandler sends a password reset email to the user.
+func ForgotPasswordHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var requestBody struct {
+			EmailAddress string `json:"email"`
+		}
+		if err := c.BindJSON(&requestBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+			return
+		}
 
-Refresh Tokens: For longer web sessions, you might want to implement refresh tokens that allow users to obtain a new access token without re-entering their credentials. This involves creating an additional endpoint to handle refresh token requests.
+		user := models.User{}
+		result := db.Where("email_address = ?", requestBody.EmailAddress).First(&user)
+		if result.Error != nil {
+			c.JSON(http.StatusOK, gin.H{"message": "If your email is registered, you will receive a password reset link."})
+			return
+		}
 
-Logout Functionality: Implement a logout mechanism that invalidates the user's current session or JWT token. Depending on your authentication strategy, this could involve maintaining a list of valid tokens on the server side or simply directing users to a logout page that clears the client-side token.
+		token, err := generateResetToken()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate reset token"})
+			return
+		}
 
-Rate Limiting and Monitoring: To protect against brute-force attacks, consider adding rate limiting to your login attempts and monitoring for suspicious authentication patterns.
+		// Set token and deadline (24 hours for token expiration)
+		user.ResetToken = token
+		user.ResetDeadline = time.Now().Add(24 * time.Hour)
 
-CORS Configuration: If your frontend and backend are served from different origins, you'll need to configure Cross-Origin Resource Sharing (CORS) in Gin to allow your frontend to make requests to your backend.
+		// Save changes to the database
+		db.Save(&user)
 
-HTTPS: Ensure that your application is served over HTTPS in production to protect sensitive information transmitted between the client and server.
+		resetURL := "http://localhost:3000/Changepassword" + token // Adjust the URL to your frontend reset password page
+		if err := sendResetEmail(requestBody.EmailAddress, resetURL); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send reset email"})
+			return
+		}
 
-*/
+		c.JSON(http.StatusOK, gin.H{"message": "If your email is registered, you will receive a password reset link."})
+	}
+}
+
+// PasswordResetHandler handles the password reset request
+func PasswordResetHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var requestBody struct {
+			Token    string `json:"token"`
+			Password string `json:"newPassword"`
+		}
+
+		// Bind the incoming JSON to requestBody
+		if err := c.BindJSON(&requestBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+			return
+		}
+
+		// Find the user by reset token
+		var user models.User
+		result := db.Where("reset_token = ? AND reset_deadline > ?", requestBody.Token, time.Now()).First(&user)
+		if result.Error != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			return
+		}
+
+		// Hash the new password
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while hashing new password"})
+			return
+		}
+
+		// Update the user's password and clear the reset token and deadline
+		user.Password = string(hashedPassword)
+		user.ResetToken = ""
+		user.ResetDeadline = time.Time{} // Resets the time to zero value, clearing it
+
+		// Save the user with updated information
+		db.Save(&user)
+
+		c.JSON(http.StatusOK, gin.H{"message": "Password has been successfully reset"})
+	}
+}
