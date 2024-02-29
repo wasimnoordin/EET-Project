@@ -6,7 +6,7 @@ import Account from './LoginComponnents/createAccount';
 import Password from './LoginComponnents/forgotpassword';
 import Home from './HomePageComponents/HomePage';
 import Booking from './BookingFormComponents/BookingForm';
-
+import OnePOne from './MapImagesComponents/Map1.1';
 function App() {
   return (
     <Router>
@@ -20,6 +20,7 @@ function App() {
         <Route path="/Changepassword" element={<Password />} />
         <Route path="/homepage" element={<Home />} />
         <Route path="/bookingform" element={<Booking />} />
+        <Route path="/1.1" element={<OnePOne />} />
         </Routes>
         </Router>
   );
