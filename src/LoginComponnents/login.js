@@ -67,7 +67,7 @@ const Login = () => {
 
                                 <button className="Loginbutton" onClick={handleLogin}>Login</button>
                                 {error && <p className='error-message'>{error}</p>}
-                                <p>
+                                <p className="Clinks">
                                     <Link to="/Changepassword"> Forgotten your password?</Link>
                                     <Link to="/Createaccount">Create an account</Link>
                                 </p>

@@ -1,25 +1,125 @@
 .Mapimg{
-    position: relative;
-    bottom: 1rem;
-    left: 1rem;
-    width:90%;
-}    
-.seat-dot {
-    background-color: green;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-  }
-
-@media only screen and (max-width: 700px) {
-    .Mapimg {
-        position: relative;
-        top: 1rem;
-        left: 1rem;
-        
-        width:100%;
-    }
     
+        position: absolute;
+        bottom: 1.1rem;
+        left: 0.5rem;
+        width:85%;
+    } 
+  
+    .ResOp{
+        display: grid;
+        background-color: green;
+        position: absolute;
+        left: 50rem;
+        z-index: 1;   
+        border-radius: 2rem;
+	border: 1px solid #070707; 
+    padding: 0.5rem;
+    }   
+    .mm
+    {
+        display: grid;
+        background-color: red;
+        position: absolute;
+        left: 50rem;
+        margin-top: 5rem;
+        z-index: 1;   
+        border-radius: 2rem;
+	border: 1px solid #070707; 
+    padding: 0.5rem;
+    }   
+    .seat-dot {
+        position: absolute;
+        background-color: green;
+        border-radius: 50%;
+        border: 1px;
+        width: 0.9rem;
+        height: 0.9rem;
+        display: inline-block;
+        font-size: 0; 
+ 
+      }
+      .seat1 {
+        bottom: 13.9rem;
+        left: 45rem;
+      }
 
+      .seat2 {
+        bottom: 13.9rem;
+        left: 46.1rem;
+      }
+
+      .seat3 {   
+        bottom: 13.9rem;
+        left: 47.3rem;
+      }
+      .booked{
+        background-color: red;
+      }
+      .popup{
+        position: relative;
+        top: 10rem;
+        left: 52rem;
+        width:10rem;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 1.25rem;
+    box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.65rem 0.65rem rgba(0,0,0,0.22); 
+      
+}
+.cancelBut{
+    position: relative;
+    margin-left: 0.3rem;
+    border-radius: 2rem;
+	border: 1px solid #070707;
+	background-color: #7c2bff;
+    color: #FFFFFF;
+	font-size: 0.7rem;
+	font-weight: bold;
+	text-transform: uppercase;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.confirmBut{
+    
+    border-radius: 2rem;
+	border: 1px solid #070707;
+	background-color: #7c2bff;
+    color: #FFFFFF;
+	font-size: 0.7rem;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+@media only screen and (min-width: 300px) and (max-width: 1204) {
+        .Mapimg {
+            position: relative;
+            width:90%;  
+        }
+        .seat1 {
+    
+            position: relative;
+            bottom: 19.4rem;
+            left: 45.5rem;
+          }
+          
+          .seat2 {
+            
+          
+            display: inline-block;
+            position: relative;
+            bottom: 19.4rem;
+            left: 45.8rem;
+          }
+          
+          .seat3 {
+          
+            display: inline-block;
+            position: relative;
+            bottom: 19.4rem;
+            left: 46rem;
+          }
+          .REdot{
+            left: 500rem;
+            bottom: 51.6rem; 
+    }
 }
