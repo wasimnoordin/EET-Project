@@ -7,6 +7,8 @@ import Password from './LoginComponnents/forgotpassword';
 import Home from './HomePageComponents/HomePage';
 import Booking from './BookingFormComponents/BookingForm';
 import OnePOne from './MapImagesComponents/Map1.1';
+import NPassword from './LoginComponnents/NewPassword';
+
 function App() {
   return (
     <Router>
@@ -21,6 +23,7 @@ function App() {
         <Route path="/homepage" element={<Home />} />
         <Route path="/bookingform" element={<Booking />} />
         <Route path="/1.1" element={<OnePOne />} />
+        <Route path="/newPassword" element={<NPassword />} />
         </Routes>
         </Router>
   );

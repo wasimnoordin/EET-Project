@@ -6,7 +6,7 @@
 }
 .bookingForm{
     align-items: center;
-    z-index: -1;    
+    z-index: 1;    
     position: relative;
     margin:auto auto;
     height: 40rem;

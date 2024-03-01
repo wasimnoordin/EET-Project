@@ -58,7 +58,7 @@ export default class OfficeMaps extends Component {
     });
 
     return (
-      <div className="seat-map">
+      <div>
         {seatDots}
         {this.state.popupVisible && (
           <div className="popup">

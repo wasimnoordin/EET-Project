@@ -33,8 +33,6 @@ nav {
     top: 9rem;
     z-index: 1;
     border-radius: 0.5em;
-    box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.65rem 0.65rem rgba(0,0,0,0.22); 
-
 }
 
 /* ------------- sliding menu ------------------ */

@@ -94,7 +94,7 @@ const Account = () => {
         </button>
       </form>
       {registrationResult && <p>{registrationResult}</p>}
-      <p className='Acclink'>
+      <p>
         Already have an account? <Link to="/" className="LogLink">Login</Link>
       </p>
     </div>
