@@ -1,6 +1,6 @@
 import './bookingForm.css'
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom'; 
 
 const deskImages = {
     "Ground.1":'./G.1.png',
@@ -30,15 +30,13 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
         const deskValue = event.target.value;
         setSelectedDesk(deskValue);
         handleDeskChange(event);
-        
     };
-
 
     const renderRadioOptions = () => {
         let numDesks = 4; // Default number of desks for other floors
 
         if (selectedFloor === "Ground") {
-            numDesks = 3; // Set to 2 desks for ground floor
+            numDesks = 3; // Set to 3 desks for ground floor
         }
 
         return [...Array(numDesks)].map((_, index) => (
@@ -54,6 +52,12 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
         ));
     };
 
+    const onButtonClick = () => {
+        // Handle button click, for example, navigate to another page
+        // Example:
+        // history.push(`/${selectedDesk}`);
+    };
+
     return (
         <div>
             {selectedFloor && (
@@ -64,10 +68,16 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
             {selectedDesk && (
                 <div>
                     <img src={deskImages[selectedDesk]} alt={`Desk ${selectedDesk}`} className='MapImg' />
+                    <button
+                        type="submit"
+                        className='SubBut'
+                        onClick={onButtonClick}
+                    >
+                        <Link to="/1.1">Submit</Link> 
+                    </button>
                 </div>
             )}
         </div>
     );
 }
-
 export default RadioOptionsComponent;

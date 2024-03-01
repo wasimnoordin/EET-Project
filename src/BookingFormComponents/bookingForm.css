@@ -40,7 +40,14 @@
    }
 
 
-
+   .SubBut{
+    position: relative;
+    right: 20rem;
+    background-color: #7c2bff;
+	color: #FFFFFF;
+    border-radius: 2rem;
+    border: 1px solid #070707;
+   }
 
 .react-datepicker {
     position: absolute;
