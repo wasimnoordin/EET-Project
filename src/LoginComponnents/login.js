@@ -30,7 +30,7 @@ const Login = () => {
           }
   
           // Login successful, redirect to dashboard using navigate
-          navigate('/dashboard');
+          navigate('/homepage');
       } catch (error) {
           setError(error.message);
       }

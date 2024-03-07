@@ -168,7 +168,8 @@ func sendResetEmail(to, token string) error {
 
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 
-	url := "http://localhost:3000/Changepassword?token=" + token // Replace with actual password reset URL
+	// Updated URL pointing to NewPassword page
+	url := "http://localhost:3000/NewPassword?token=" + token
 	message := []byte("To: " + to + "\r\n" +
 		"Subject: Password Reset Request\r\n" +
 		"\r\n" +
@@ -209,7 +210,7 @@ func ForgotPasswordHandler(db *gorm.DB) gin.HandlerFunc {
 		// Save changes to the database
 		db.Save(&user)
 
-		resetURL := "http://localhost:3000/Changepassword" + token // Adjust the URL to your frontend reset password page
+		resetURL := "http://localhost:3000/Newpassword" + token // Adjust the URL to your frontend reset password page
 		if err := sendResetEmail(requestBody.EmailAddress, resetURL); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send reset email"})
 			return
