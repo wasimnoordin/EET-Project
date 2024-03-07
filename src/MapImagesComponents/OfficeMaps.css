@@ -1,10 +1,12 @@
 .Mapimg{
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    width:85%;
+  display: inline-block;
+    position: relative;
+    bottom: 0.39rem;
+    right: 1rem;
+    width:89%;
 }    
 .seat-dot {
+  position: absolute;
     background-color: green;
     border-radius: 50%;
     width: 10px;
@@ -17,21 +19,21 @@
 
   }
   .seat1 {
-    position: absolute;
-    top: 25.6rem;
-    left: 45.5rem;
+    
+    top: 26.4rem;
+    left: 45rem;
   }
   
   .seat2 {
-    position: absolute;
-    top: 25.6rem;
-    left: 46.7rem;
+    
+    top: 26.4rem;
+    left: 46.2rem;
   }
   
   .seat3 {
-    position: absolute;
-    top: 25.6rem;
-    left: 47.9rem;
+   
+    top: 26.4rem;
+    left: 47.3rem;
   }
   .booked{
     background-color: red;
@@ -40,8 +42,9 @@
   .popup{
     height: 14rem;
     width: 12rem;
-    left: 51rem;
-    position: absolute;
+    left: 50rem;
+    position: relative;
+    z-index: 1;
     background-color: #fff;
     border-radius: 1.25rem;
     box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.65rem 0.65rem rgba(0,0,0,0.22);
@@ -75,40 +78,28 @@
 	transition: transform 80ms ease-in;   
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1200px) {
     .Mapimg {
-        position: relative;
-        top: 1rem;
+        
+        bottom: 15rem;
         left: 1rem;
-        width:100%;
+        width:85%;
     }
 
-        .Mapimg {
-            position: relative;
-            width:90%;  
-        }
+      
         .seat1 {
-    
-            position: relative;
-            bottom: 19.4rem;
-            left: 45.5rem;
+           top:25.2rem;
+            left: 45rem;
           }
           
           .seat2 {
-            
-          
-            display: inline-block;
-            position: relative;
-            bottom: 19.4rem;
-            left: 45.8rem;
+            top:25.2rem;
+            left: 46rem;
           }
           
           .seat3 {
-          
-            display: inline-block;
-            position: relative;
-            bottom: 19.4rem;
-            left: 46rem;
+            top:25.2rem;
+            left: 47.3rem;
           }
 
 }

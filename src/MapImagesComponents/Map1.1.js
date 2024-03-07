@@ -9,10 +9,11 @@ function OnePOne(){
             <Navbar />
             <div className='wrapper'>
                 <div className="bookingForm">
+                <OfficeMaps />
                     <Mapimg
                     src="./1.1.png"
                     alt="1.1"/>
-                        <OfficeMaps />
+                        
                     </div>
                     </div>
         </div>
