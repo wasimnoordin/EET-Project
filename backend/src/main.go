@@ -27,7 +27,7 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowWildcard:    true,
@@ -60,6 +60,8 @@ func main() {
 		api.POST("/login", LoginHandler(db))
 		api.POST("/forgot-password", ForgotPasswordHandler(db))
 		api.POST("/reset-password", PasswordResetHandler(db))
+		api.GET("/getUsername", GetUsernameHandler(db))
+		api.GET("/getBookings")
 		api.GET("/echo/:message", echoHandler(db))
 	}
 

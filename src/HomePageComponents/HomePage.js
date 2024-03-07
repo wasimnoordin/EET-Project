@@ -11,18 +11,29 @@ function Home() {
 
     // Fetch the username data from backend API
     useEffect(() => {
-        fetch('/api/getUsername')
-            .then(response => response.json())
-            .then(data => setUsername(data.username))
-            .catch(error => console.error('Error fetching username:', error));
+        const token = localStorage.getItem('token'); // Retrieve the token
+        fetch('http://localhost:8080/api/getUsername', {
+            headers: new Headers({
+                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+            }),
+        })
+        .then(response => response.json())
+        .then(data => setUsername(data.username))
+        .catch(error => console.error('Error fetching username:', error));
     }, []);
 
     // Fetch the bookings data from backend API
     useEffect(() => {
-        fetch('/api/getBookings')
-            .then(response => response.json())
-            .then(data => setBookings(data))
-            .catch(error => console.error('Error fetching bookings:', error));
+        // Assuming you also need to authenticate this request
+        const token = localStorage.getItem('token');
+        fetch('http://localhost:8080/api/getBookings', {
+            headers: new Headers({
+                'Authorization': `Bearer ${token}`, // Include the token here as well if needed
+            }),
+        })
+        .then(response => response.json())
+        .then(data => setBookings(data))
+        .catch(error => console.error('Error fetching bookings:', error));
     }, []);
 
     const handleCheckIn = () => {
@@ -39,7 +50,6 @@ function Home() {
     }
 
     const handleSubmitNotification = () => {
-        // Here you can handle the submission of the notification content
         alert(`Notification content submitted: ${notificationContent}`);
         setShowNotificationModal(false);
     }
@@ -71,7 +81,6 @@ function Home() {
             </div>
         </div>
     );
-    
 }
 
 export default Home;
