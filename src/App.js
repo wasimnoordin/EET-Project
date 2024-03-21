@@ -13,8 +13,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Header />
-        
+        <Header />  
       </div>
         <Routes>
         <Route path="/" element={<Login />} />
@@ -23,7 +22,7 @@ function App() {
         <Route path="/homepage" element={<Home />} />
         <Route path="/bookingform" element={<Booking />} />
         <Route path="/1.1" element={<OnePOne />} />
-        <Route path="/newPassword" element={<NPassword />} />
+        <Route path="/NewPassword/:token" element={<NPassword />} />
         </Routes>
         </Router>
   );

@@ -161,7 +161,7 @@ func generateResetToken() (string, error) {
 }
 
 // Helper function to send email
-func sendResetEmail(to, token string) error {
+func sendResetEmail(to, passwordResetUrl string) error {
 	from := os.Getenv("SMTP_FROM")
 	password := os.Getenv("SMTP_PASS")
 	smtpHost := os.Getenv("SMTP_HOST")
@@ -169,15 +169,21 @@ func sendResetEmail(to, token string) error {
 
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 
-	// Updated URL pointing to NewPassword page
-	url := "http://localhost:3000/NewPassword?token=" + token
 	message := []byte("To: " + to + "\r\n" +
 		"Subject: Password Reset Request\r\n" +
 		"\r\n" +
-		"You requested a password reset. Click the following link to reset your password:\r\n" + url +
+		"You requested a password reset. Click the following link to reset your password:\r\n" + passwordResetUrl +
 		"\r\nIf you did not request a password reset, please ignore this email.\r\n")
 
+	log.Info("smtpHost", smtpHost)
+	log.Info("smtpPort", smtpPort)
+	log.Info("auth", auth)
+	log.Info("from", from)
+	log.Info("to", to)
+	log.Info("message", string(message))
+
 	return smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, message)
+
 }
 
 // ForgotPasswordHandler sends a password reset email to the user.
@@ -211,8 +217,9 @@ func ForgotPasswordHandler(db *gorm.DB) gin.HandlerFunc {
 		// Save changes to the database
 		db.Save(&user)
 
-		resetURL := "http://localhost:3000/Newpassword" + token // Adjust the URL to your frontend reset password page
+		resetURL := "http://localhost:3000/NewPassword/" + token // Adjust the URL to frontend reset password page
 		if err := sendResetEmail(requestBody.EmailAddress, resetURL); err != nil {
+			log.Error(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send reset email"})
 			return
 		}
