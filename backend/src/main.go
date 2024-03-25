@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	models "EET-Project/auth"
+	models "EET-Project/models"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

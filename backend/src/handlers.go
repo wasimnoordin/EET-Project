@@ -1,7 +1,7 @@
 package main
 
 import (
-	models "EET-Project/auth"
+	models "EET-Project/models"
 	"crypto/rand"
 	"fmt"
 	"net/http"
