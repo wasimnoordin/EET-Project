@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/rand"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -131,15 +129,15 @@ func echoHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-// Helper function to generate a secure token
-func generateToken() (string, error) {
-	token := make([]byte, 16) // Generates a 128-bit token
-	_, err := rand.Read(token)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%x", token), nil
-}
+// // Helper function to generate a secure token
+// func generateToken() (string, error) {
+// 	token := make([]byte, 16) // Generates a 128-bit token
+// 	_, err := rand.Read(token)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return fmt.Sprintf("%x", token), nil
+// }
 
 /*
 // Helper function to send email

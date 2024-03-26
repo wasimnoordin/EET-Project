@@ -1,4 +1,4 @@
-package main
+package user
 
 import (
 	"EET-Project/internal/models"
@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
