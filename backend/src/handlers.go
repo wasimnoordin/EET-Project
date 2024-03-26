@@ -1,39 +1,20 @@
 package main
 
 import (
-	models "EET-Project/models"
 	"crypto/rand"
 	"fmt"
 	"net/http"
-	"net/smtp"
-	"os"
-	"strings"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-// Define your UserClaims for JWT
-type UserClaims struct {
-	Email string `json:"email"`
-	jwt.StandardClaims
-}
-
-// Define your UserCredentials struct for registration data
-type UserCredentials struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
+/*
 // RegisterHandler is now a function that returns a gin.HandlerFunc
 func RegisterHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var newUser UserCredentials
+		var newUser models.UserCredentials
 		if err := c.BindJSON(&newUser); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -124,7 +105,7 @@ func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		expirationTime := time.Now().Add(1 * time.Hour)
-		claims := &UserClaims{
+		claims := models.UserClaims{
 			Email: user.EmailAddress,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
@@ -140,7 +121,7 @@ func LoginHandler(db *gorm.DB) gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{"token": tokenString})
 	}
-}
+}*/
 
 func echoHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -151,7 +132,7 @@ func echoHandler(db *gorm.DB) gin.HandlerFunc {
 }
 
 // Helper function to generate a secure token
-func generateResetToken() (string, error) {
+func generateToken() (string, error) {
 	token := make([]byte, 16) // Generates a 128-bit token
 	_, err := rand.Read(token)
 	if err != nil {
@@ -160,6 +141,7 @@ func generateResetToken() (string, error) {
 	return fmt.Sprintf("%x", token), nil
 }
 
+/*
 // Helper function to send email
 func sendResetEmail(to, passwordResetUrl string) error {
 	from := os.Getenv("SMTP_FROM")
@@ -186,6 +168,7 @@ func sendResetEmail(to, passwordResetUrl string) error {
 
 }
 
+
 // ForgotPasswordHandler sends a password reset email to the user.
 func ForgotPasswordHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -204,7 +187,7 @@ func ForgotPasswordHandler(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		token, err := generateResetToken()
+		token, err := generateToken()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate reset token"})
 			return
@@ -267,8 +250,9 @@ func PasswordResetHandler(db *gorm.DB) gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{"message": "Password has been successfully reset"})
 	}
-}
+}*/
 
+/*
 // GetUsernameHandler returns the username of the logged-in user.
 func GetUsernameHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -286,7 +270,7 @@ func GetUsernameHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		// Parse token
-		token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenString, models.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
 		if err != nil {
@@ -294,7 +278,7 @@ func GetUsernameHandler(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
+		if claims, ok := token.Claims.(models.UserClaims); ok && token.Valid {
 			// Token is valid, get the user from the database
 			var user models.User
 			result := db.Where("email_address = ?", claims.Email).First(&user)
@@ -309,4 +293,4 @@ func GetUsernameHandler(db *gorm.DB) gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
 		}
 	}
-}
+}*/

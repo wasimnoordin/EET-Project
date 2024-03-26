@@ -5,7 +5,9 @@ import (
 	"os"
 	"time"
 
-	models "EET-Project/models"
+	"EET-Project/internal/login"
+	"EET-Project/internal/models"
+	"EET-Project/internal/registration"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -56,10 +58,10 @@ func main() {
 	// Setup route group for API
 	api := r.Group("/api")
 	{
-		api.POST("/register", RegisterHandler(db))
-		api.POST("/login", LoginHandler(db))
-		api.POST("/forgot-password", ForgotPasswordHandler(db))
-		api.POST(apiPathPasswordReset, PasswordResetHandler(db))
+		api.POST(apiPathRegister, registration.RegisterHandler(db))
+		api.POST(apiPathLogin, login.LoginHandler(db))
+		api.POST(apiPathForgotPassword, login.ForgotPasswordHandler(db))
+		api.POST(apiPathPasswordReset, login.PasswordResetHandler(db))
 		//api.GET("/getUsername", GetUsernameHandler(db))
 		//api.GET("/getBookings")
 		api.GET("/echo/:message", echoHandler(db))

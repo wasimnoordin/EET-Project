@@ -1,5 +1,8 @@
 package main
 
 const (
-	apiPathPasswordReset = "/Passwordreset"
+	apiPathRegister       = "/register"
+	apiPathLogin          = "/login"
+	apiPathForgotPassword = "/forgot-password"
+	apiPathPasswordReset  = "/Passwordreset"
 )
