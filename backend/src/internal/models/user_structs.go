@@ -10,11 +10,13 @@ import (
 // User struct declaration
 type User struct {
 	gorm.Model
-	Name          string
-	EmailAddress  string `gorm:"type:varchar(100);unique_index"`
-	Password      string `json:"Password"`
-	ResetToken    string
-	ResetDeadline time.Time
+	Name                 string
+	EmailAddress         string `gorm:"type:varchar(100);unique_index"`
+	Password             string `json:"Password"`
+	ResetToken           string
+	SessionToken         string
+	SessionTokenDeadline time.Time
+	ResetTokenDeadline   time.Time
 }
 
 // Define your UserClaims for JWT

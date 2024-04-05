@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom'; // Import useParams
 import './NewPassword.css';
 
 const NPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
-    const { token } = useParams(); // Use useParams to get the token
 
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
@@ -18,17 +16,25 @@ const NPassword = () => {
             return;
         }
 
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem('resetToken');
+
         try {
-            const response = await fetch('http://localhost:8080/api/Passwordreset', { 
+            const response = await fetch('http://localhost:8080/api/Passwordreset', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, newPassword: password }), // Use token directly
+                body: JSON.stringify({ token, newPassword: password }),
             });
             const data = await response.json();
+
+            // Clear the token from localStorage after use
+            localStorage.removeItem('resetToken');
+
             if (data.error) {
                 setMessage(data.error);
             } else {
                 setMessage("Password reset successful. You can now log in with your new password.");
+                // Optional: Redirect to login page, e.g., window.location.replace("/login");
             }
         } catch (error) {
             console.error('Error:', error);

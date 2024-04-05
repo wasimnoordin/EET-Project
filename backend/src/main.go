@@ -7,6 +7,7 @@ import (
 
 	"EET-Project/internal/api/v1/login"
 	"EET-Project/internal/api/v1/registration"
+	"EET-Project/internal/api/v1/user"
 	"EET-Project/internal/models"
 
 	"github.com/gin-contrib/cors"
@@ -62,7 +63,7 @@ func main() {
 		api.POST(login.ApiPathLogin, login.LoginHandler(db))
 		api.POST(login.ApiPathForgotPassword, login.ForgotPasswordHandler(db))
 		api.POST(login.ApiPathPasswordReset, login.PasswordResetHandler(db))
-		//api.GET("/getUsername", GetUsernameHandler(db))
+		api.GET(user.ApiPathGetUsername, user.GetUsernameHandler(db))
 		//api.GET("/getBookings")
 		api.GET("/echo/:message", echoHandler(db))
 	}

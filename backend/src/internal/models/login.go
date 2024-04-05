@@ -62,6 +62,34 @@ func HandleLogin(db *gorm.DB, c *gin.Context) (gin.H, error) {
 	return gin.H{"token": tokenString}, nil
 }
 
+// HandleSessionID handles the logic for sending a password reset email
+func HandleSessionID(db *gorm.DB, c *gin.Context) (gin.H, error) {
+	var requestBody struct {
+		EmailAddress string `json:"email"`
+	}
+	if err := c.BindJSON(&requestBody); err != nil {
+		return nil, errors.New("invalid request")
+	}
+	user := User{}
+
+	token, err := token.Generate()
+	if err != nil {
+		return nil, errors.New("Failed to generate session token")
+	}
+
+	// Set token and deadline (24 hours for token expiration)
+	user.SessionToken = token
+	user.SessionTokenDeadline = time.Now().Add(24 * time.Hour)
+
+	// Save changes to the database
+	if err := db.Save(&user).Error; err != nil {
+		return nil, errors.New("Failed to save session token")
+	}
+
+	// If everything went fine, return a success message
+	return gin.H{"message": "Session token generated successfully."}, nil
+}
+
 // HandleForgotPassword handles the logic for sending a password reset email
 func HandleForgotPassword(db *gorm.DB, c *gin.Context) (gin.H, error) {
 	var requestBody struct {
@@ -84,7 +112,7 @@ func HandleForgotPassword(db *gorm.DB, c *gin.Context) (gin.H, error) {
 
 	// Set token and deadline (24 hours for token expiration)
 	user.ResetToken = token
-	user.ResetDeadline = time.Now().Add(24 * time.Hour)
+	user.ResetTokenDeadline = time.Now().Add(24 * time.Hour)
 
 	// Save changes to the database
 	db.Save(&user)
@@ -151,7 +179,7 @@ func HandlePasswordReset(db *gorm.DB, c *gin.Context) (gin.H, error) {
 	// Update the user's password and clear the reset token and deadline
 	user.Password = string(hashedPassword)
 	user.ResetToken = ""
-	user.ResetDeadline = time.Time{} // Resets the time to zero value, clearing it
+	user.ResetTokenDeadline = time.Time{} // Resets the time to zero value, clearing it
 
 	// Save the user with updated information
 	db.Save(&user)
