@@ -35,7 +35,7 @@ const Login = () => {
             
             //console.log('Token:', token); // Log or use the token as needed
             // Store the token in localStorage or another method of your choice
-            //localStorage.setItem('token', token);
+            localStorage.setItem('token', data.token);
     
             // Login successful, redirect to homepage using navigate
             navigate('/homepage');
