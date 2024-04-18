@@ -22,6 +22,7 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
             <label key={index}>
                 <input
                     type="radio"
+                  
                     value={`${selectedFloor}.${index + 1}`}
                     checked={selectedDesk === `${selectedFloor}.${index + 1}`}
                     onChange={handleChange}

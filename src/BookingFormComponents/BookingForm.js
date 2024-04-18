@@ -6,17 +6,16 @@ import FloorDropdownComponent from './FloorDropdown';
 import RadioOptionsComponent from './Floor';
 
 function Booking() {
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [showCalendar, setShowCalendar] = useState(false);
-    const [showFloorDropdown, setShowFloorDropdown] = useState(false);
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedArea, setSelectedArea] = useState(null);
 
- 
+    const handleFloorChange = event => {
+        setSelectedFloor(event.target.value);
+    };
+
     const handleDeskChange = event => {
         setSelectedArea(event.target.value);
     };
-
 
     return (
         <div>
@@ -35,9 +34,16 @@ function Booking() {
                     </div>
                     <div className='inlineElements'>
                         <DatepickerComponent />
-
-                        <FloorDropdownComponent />
-   <RadioOptionsComponent selectedFloor={selectedFloor} handleDeskChange={handleDeskChange} />
+                        <FloorDropdownComponent 
+                            selectedFloor={selectedFloor} 
+                            handleFloorChange={handleFloorChange} 
+                        />
+                        <div className='radio'>
+                        <  RadioOptionsComponent 
+                            selectedFloor={selectedFloor} 
+                            handleDeskChange={handleDeskChange} 
+                        />
+                        </div>
                     </div>
                 </div>
             </div>

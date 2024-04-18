@@ -20,7 +20,11 @@
     display: inline-table;
     margin-left: 2rem;
 }
-
+.OfficeOption{
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem; 
+}
 .react-datepicker {
     position: absolute;
     top: 100%; /* Position it below the parent component */
@@ -29,11 +33,27 @@
     border-radius: 0.9rem;
     font-size: 0.8rem;
 }
-
+.SelectDateCalendar{
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
+}
+.radio{
+    position:absolute;
+    left: 3rem;
+    bottom: 3rem;
+}
 .floor {
     position: absolute;
    right: 25rem;
    top: 4rem;
+   
+  
+}
+.timeBox{
+    border: 1px solid #070707;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .floorOption {
@@ -59,47 +79,22 @@
     left: 10rem;
     width:70%;
 }
-
+.SubBut{
+    position: absolute;
+    top: 2rem;
+    border-radius: 2rem;
+	border: 1px solid #070707;
+	background-color: #7c2bff;
+	color: #FFFFFF;
+	font-size: 0.75rem;
+	font-weight: bold;
+	padding: 0.2rem 1rem;
+}
 @media only screen and (max-width: 1000px) {
-    .bookingForm{
-        top:5rem;
-        height: 45rem;
-    }
-    .floorOption {
-    
-    }
-
-
-    .MapImg {
-        position: relative;
-        top: 2rem;
-        left: 1rem;
-        
-        width:100%;
-    }
+   
     
 }
 
 @media only screen and (max-width: 700px) {
-
-    .bookingForm{
-        top:5rem;
-        height: 40rem;
-    }
-    .floorOption {
-       left: 29rem;
-        bottom:1.25rem;       
-        font-size: 0.8rem;
-    }
-
-
-    .MapImg {
-        position: relative;
-        top: 1rem;
-        left: 1rem;
-        
-        width:100%;
-    }
-    
 
 }

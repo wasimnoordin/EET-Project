@@ -16,6 +16,7 @@ function TimePicker({ label, hours, minutes, onHourChange, onMinuteChange }) {
             <label>{label}</label>
             <div className="time-picker">
                 <input
+                className='timeBox'
                     type="number"
                     min="00"
                     max="23"
@@ -24,6 +25,7 @@ function TimePicker({ label, hours, minutes, onHourChange, onMinuteChange }) {
                 />
                 <span>:</span>
                 <input
+                 className='timeBox'
                     type="number"
                     min="00"
                     max="59"
