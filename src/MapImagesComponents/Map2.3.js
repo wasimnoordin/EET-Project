@@ -3,20 +3,20 @@ import Mapimg from "./OfficeMaps";
 import OfficeMaps from "./SeatAllocation";
 import './OfficeMaps.css';
 
-function OnePOne(){
+function TwoPThree(){
     return(
         <div>
             <Navbar />
             <div className='wrapper'>
-                
+               
                 <OfficeMaps />
                     <Mapimg
-                    src="./1.1.png"
-                    alt="1.1"/>
+                    src="./2.3.png"
+                    alt="2.3"/>
                         
-                    </div>
                     
+                    </div>
         </div>
     )
 }
-export default OnePOne;
+export default TwoPThree;

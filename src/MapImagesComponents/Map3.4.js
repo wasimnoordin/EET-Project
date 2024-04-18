@@ -3,20 +3,18 @@ import Mapimg from "./OfficeMaps";
 import OfficeMaps from "./SeatAllocation";
 import './OfficeMaps.css';
 
-function OnePOne(){
+function ThreePFour(){
     return(
         <div>
             <Navbar />
             <div className='wrapper'>
-                
                 <OfficeMaps />
                     <Mapimg
-                    src="./1.1.png"
-                    alt="1.1"/>
-                        
-                    </div>
+                    src="./3.4.png"
+                    alt="3.4"/>
                     
+                    </div>
         </div>
     )
 }
-export default OnePOne;
+export default ThreePFour;
