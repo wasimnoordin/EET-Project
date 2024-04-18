@@ -12,52 +12,33 @@ function Booking() {
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedArea, setSelectedArea] = useState(null);
 
-    const handleOfficeSelect = () => {
-        setShowCalendar(true);
-        setShowFloorDropdown(false);
-        setSelectedDate(null);
-        setSelectedArea("");
-    };
-
-    const handleDateChange = date => {
-        setSelectedDate(date);
-        setShowFloorDropdown(true);
-        setSelectedArea("");
-        setSelectedFloor("");
-    };
-
-    const handleFloorChange = event => {
-        setSelectedFloor(event.target.value);
-        setSelectedArea("");
-    };
-
+ 
     const handleDeskChange = event => {
         setSelectedArea(event.target.value);
     };
+
 
     return (
         <div>
             <Navbar />
             <div className='wrapper'>
                 <div className="bookingForm">
-                    <label className="Office">Choose an office:</label>
-                    <select id="Office" 
-                            name="Office" 
-                            className="OfficeOption" 
-                            onChange={handleOfficeSelect}>
-                        <option value="">Office</option>
-                        <option value="Telford">Telford</option>
-                    </select>
+                    <div className='inlineElements'>
+                        <label className="Office">Choose an office:</label>
+                        <select id="Office" 
+                                name="Office" 
+                                className="OfficeOption" 
+                                onChange={handleDeskChange}>
+                            <option value="">Office</option>
+                            <option value="Telford">Telford</option>  
+                        </select>
+                    </div>
+                    <div className='inlineElements'>
+                        <DatepickerComponent />
 
-                    {showCalendar && (
-                        <DatepickerComponent selectedDate={selectedDate} handleDateChange={handleDateChange} />
-                    )}
-
-                    {showFloorDropdown && (
-                        <FloorDropdownComponent handleFloorChange={handleFloorChange} selectedFloor={selectedFloor} />
-                    )}
-                   
-                    <RadioOptionsComponent selectedFloor={selectedFloor} handleDeskChange={handleDeskChange} />
+                        <FloorDropdownComponent />
+   <RadioOptionsComponent selectedFloor={selectedFloor} handleDeskChange={handleDeskChange} />
+                    </div>
                 </div>
             </div>
         </div>

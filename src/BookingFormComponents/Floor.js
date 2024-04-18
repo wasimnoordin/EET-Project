@@ -2,27 +2,6 @@ import './bookingForm.css'
 import { useState } from 'react';
 import { Link } from 'react-router-dom'; 
 
-const deskImages = {
-    "Ground.1":'./G.1.png',
-    "Ground.3":'./G.3.png',
-    "1.1": './1.1.png',
-    "1.2": './1.2.png',
-    "1.3": './1.3.png',
-    "1.4": './1.4.png',
-    "2.1": './2.1.png',
-    "2.2": './2.2.png',
-    "2.3": './2.3.png',
-    "2.4": './2.4.png',
-    "3.1": './3.1.png',
-    "3.2": './3.2.png',
-    "3.3": './3.3.png',
-    "3.4": './3.4.png',
-    "4.1": './4.1.png',
-    "4.2": './4.2.png',
-    "4.3": './4.3.png',
-    "4.4": './4.4.png',
-};
-
 function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
     const [selectedDesk, setSelectedDesk] = useState(null);
 
@@ -52,12 +31,6 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
         ));
     };
 
-    const onButtonClick = () => {
-        // Handle button click, for example, navigate to another page
-        // Example:
-        // history.push(`/${selectedDesk}`);
-    };
-
     return (
         <div>
             {selectedFloor && (
@@ -67,14 +40,14 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
             )}
             {selectedDesk && (
                 <div>
-                    <img src={deskImages[selectedDesk]} alt={`Desk ${selectedDesk}`} className='MapImg' />
-                    <button
-                        type="submit"
-                        className='SubBut'
-                        onClick={onButtonClick}
-                    >
-                        <Link to="/1.1">Submit</Link> 
-                    </button>
+                    <Link to={`/${selectedDesk}`}>
+                        <button
+                            type="submit"
+                            className='SubBut'
+                        >
+                            Submit
+                        </button>
+                    </Link>
                 </div>
             )}
         </div>

@@ -3,7 +3,7 @@ import './bookingForm.css'
 
 function FloorDropdownComponent({ handleFloorChange, selectedFloor }) {
     return (
-        <div>
+        <div className=''>
             <label className="floor">Choose a floor:</label>
             <select 
                 id="floor"

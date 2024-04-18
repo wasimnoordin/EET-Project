@@ -1,71 +1,45 @@
-.wrapper{
+.wrapper {
     max-width: 1170px;
-    margin:auto;
+    margin: auto;
     padding: 70px;
-    
 }
-.bookingForm{
+
+.bookingForm {
     align-items: center;
-   
     position: relative;
-    margin:auto auto;
-    height: 40rem;
+    margin: auto auto;
+    height: 10rem;
+    width: 35rem;
     padding: 20px;
     background-color: #fff;
     border-radius: 1.25rem;
-    
-    box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.65rem 0.65rem rgba(0,0,0,0.22);
-}
-.Office {
-    display: inline;
-       width: 20%;
-      
-}
-.OfficeOption{
-    width: 15%;
-    border: 1px solid #070707;
-    border-radius: 1.25rem;
-    padding: 0 1em 0 0;
-    margin-left: 0.4rem;
-    bottom:1.25rem;
+    box-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.25), 0 0.65rem 0.65rem rgba(0, 0, 0, 0.22);
 }
 
-.SelectDateCalendar{
-    position: static; /* Change to relative to make sure it's relative to its parent */
-    margin-left: 0.5rem;
-    border: 1px solid #070707;
-    border-radius: 0.9rem;
-    font-size: 0.8rem;
-   bottom:1.25rem;
-   }
-
-
-   .SubBut{
-    position: relative;
-    right: 20rem;
-    background-color: #7c2bff;
-	color: #FFFFFF;
-    border-radius: 2rem;
-    border: 1px solid #070707;
-   }
+.inlineElements {
+    display: inline-table;
+    margin-left: 2rem;
+}
 
 .react-datepicker {
     position: absolute;
     top: 100%; /* Position it below the parent component */
-    left: 3rem; 
+    left: 3rem;
     border: 1px solid #070707;
     border-radius: 0.9rem;
     font-size: 0.8rem;
 }
-.floor{
-    position: Static;
+
+.floor {
+    position: absolute;
+   right: 25rem;
+   top: 4rem;
 }
-  
- .floorOption {
-    display: inline;
-    position: static;
-    margin-top: 1rem;
-    margin-left: 0.5rem;
+
+.floorOption {
+    position: absolute;
+    right: 20rem;
+    top: 4.3rem;
     border: 1px solid #070707;
     border-radius: 0.9rem;
     font-size: 0.8rem;
@@ -92,9 +66,7 @@
         height: 45rem;
     }
     .floorOption {
-       left: 29rem;
-        bottom:1.25rem;       
-        font-size: 0.8rem;
+    
     }
 
 
