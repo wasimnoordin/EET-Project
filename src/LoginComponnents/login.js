@@ -11,9 +11,6 @@ const Login = () => {
     const handleLogin = async () => {
         setError('');
     
-        // Log email and password before sending the request
-        console.log({ email, password });
-    
         try {
             const response = await fetch('http://localhost:8080/api/login', {
                 method: 'POST',
@@ -23,24 +20,17 @@ const Login = () => {
                 body: JSON.stringify({ email, password }),
             });
     
-            const data = await response.json();
-            console.log('CAN YOU SEE ME!!!!!!! -> ', response);
+            const data = await response.json(); // Parse JSON only after checking the response status
     
             if (!response.ok) {
                 throw new Error(data.error || 'Login failed');
             }
     
-            // Assuming your API returns a token upon successful login
-            // and that it's located in the `data` object under `token`
-            
-            //console.log('Token:', token); // Log or use the token as needed
-            // Store the token in localStorage or another method of your choice
+            // Store the token in localStorage and navigate only if login is successful
             localStorage.setItem('token', data.token);
-    
-            // Login successful, redirect to homepage using navigate
-            navigate('/homepage');
+            navigate('/homepage'); // Redirect only on successful login
         } catch (error) {
-            setError(error.message);
+            setError(error.message); // Show error message from the API or network error
         }
     };
     

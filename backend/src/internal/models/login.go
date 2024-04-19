@@ -3,7 +3,7 @@ package models
 import (
 	"EET-Project/internal/api/v1/token"
 	"errors"
-	"fmt"
+	"net/http"
 	"net/smtp"
 	"os"
 	"time"
@@ -15,8 +15,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// HandleLogin handles user login logic and returns response
-func HandleLogin(db *gorm.DB, c *gin.Context) (gin.H, error) {
+// HandleLogin handles user login logic and sets the HTTP response directly
+func HandleLogin(db *gorm.DB, c *gin.Context) {
 	var loginCredentials struct {
 		EmailAddress string `json:"email"`
 		Password     string `json:"password"`
@@ -24,27 +24,31 @@ func HandleLogin(db *gorm.DB, c *gin.Context) (gin.H, error) {
 
 	log.Info("Login Handler")
 
+	// Bind JSON payload to struct and handle any error
 	if err := c.BindJSON(&loginCredentials); err != nil {
-		return nil, err
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
-	// Log the entire request body content
-	bodyContent, _ := c.GetRawData()
-	fmt.Printf("Request Body: %s\n", bodyContent)
-
+	// Retrieve user from the database based on email
 	var user User
 	result := db.Where("email_address = ?", loginCredentials.EmailAddress).First(&user)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			return gin.H{"error": "Invalid login credentials"}, nil
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		}
-		return nil, result.Error
+		return
 	}
 
+	// Compare hashed password with the provided password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginCredentials.Password)); err != nil {
-		return gin.H{"error": "Invalid login credentials"}, nil
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login credentials"})
+		return
 	}
 
+	// Generate JWT token
 	expirationTime := time.Now().Add(1 * time.Hour)
 	claims := UserClaims{
 		Email: user.EmailAddress,
@@ -52,14 +56,15 @@ func HandleLogin(db *gorm.DB, c *gin.Context) (gin.H, error) {
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		return nil, err
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})
+		return
 	}
 
-	return gin.H{"token": tokenString}, nil
+	// Send the token back to the client
+	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
 
 // HandleSessionID handles the logic for sending a password reset email

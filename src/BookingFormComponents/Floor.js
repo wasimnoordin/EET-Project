@@ -1,28 +1,23 @@
 import './bookingForm.css'
 import { useState } from 'react';
-import { Link } from 'react-router-dom'; 
 
-function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
+function RadioOptionsComponent({ selectedFloor, handleDeskChange, handleSelectedDesk }) {
     const [selectedDesk, setSelectedDesk] = useState(null);
 
     const handleChange = event => {
         const deskValue = event.target.value;
         setSelectedDesk(deskValue);
-        handleDeskChange(event);
+        handleDeskChange(event); // If still needed
+        handleSelectedDesk(deskValue); // Pass the selected desk back to parent
     };
 
     const renderRadioOptions = () => {
-        let numDesks = 4; // Default number of desks for other floors
+        let numDesks = selectedFloor === "Ground" ? 3 : 4; // Simplified conditional logic
 
-        if (selectedFloor === "Ground") {
-            numDesks = 3; // Set to 3 desks for ground floor
-        }
-
-        return [...Array(numDesks)].map((_, index) => (
+        return Array.from({ length: numDesks }, (_, index) => (
             <label key={index}>
                 <input
                     type="radio"
-                  
                     value={`${selectedFloor}.${index + 1}`}
                     checked={selectedDesk === `${selectedFloor}.${index + 1}`}
                     onChange={handleChange}
@@ -34,24 +29,9 @@ function RadioOptionsComponent({ selectedFloor, handleDeskChange }) {
 
     return (
         <div>
-            {selectedFloor && (
-                <div>
-                    {renderRadioOptions()}
-                </div>
-            )}
-            {selectedDesk && (
-                <div>
-                    <Link to={`/${selectedDesk}`}>
-                        <button
-                            type="submit"
-                            className='SubBut'
-                        >
-                            Submit
-                        </button>
-                    </Link>
-                </div>
-            )}
+            {selectedFloor && renderRadioOptions()}
         </div>
     );
 }
+
 export default RadioOptionsComponent;
